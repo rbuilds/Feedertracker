@@ -207,7 +207,7 @@ const Cell = ({ cell, onUpdateStatus }) => {
                     <ul className="py-1">
                         {Object.entries(STATUSES).map(([key, value]) => (
                             <li key={key}>
-                                <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(key); }} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" > {value.icon} {value.text} </a>
+                                <button onClick={() => handleSelect(key)} className="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" > {value.icon} {value.text} </button>
                             </li>
                         ))}
                     </ul>
@@ -249,7 +249,7 @@ const BorescopeItem = ({ item, onUpdateStatus }) => {
                     <ul className="py-1">
                         {Object.entries(BORESCOPE_STATUSES).map(([key, value]) => (
                             <li key={key}>
-                                <a href="#" onClick={(e) => { e.preventDefault(); handleSelect(key); }} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" > {value.icon} {value.text} </a>
+                                <button onClick={() => handleSelect(key)} className="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" > {value.icon} {value.text} </button>
                             </li>
                         ))}
                     </ul>
@@ -711,3 +711,4 @@ export default function App() {
         </div>
     );
 }
+
