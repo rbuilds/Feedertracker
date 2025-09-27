@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from 'firebase/auth';
 import { getFirestore, collection, doc, getDocs, writeBatch, updateDoc, onSnapshot, serverTimestamp, addDoc, query, orderBy } from 'firebase/firestore';
-import { ChevronDown, CheckCircle, XCircle, Clock, PauseCircle, PlayCircle, FileDown } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, PauseCircle, PlayCircle, FileDown } from 'lucide-react';
 
 // --- Firebase Configuration ---
 // Your web app's Firebase configuration
