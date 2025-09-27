@@ -15,6 +15,8 @@ const firebaseConfig = {
   appId: "1:582594266927:web:ee0f4dcb1d4c1817f8c3da"
 };
 
+// Initialize Firebase (No need to assign to 'app' if it's not used elsewhere)
+initializeApp(firebaseConfig);
 
 // --- App ID ---
 // A unique identifier for this application.
