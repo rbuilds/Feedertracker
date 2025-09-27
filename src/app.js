@@ -15,9 +15,6 @@ const firebaseConfig = {
   appId: "1:582594266927:web:ee0f4dcb1d4c1817f8c3da"
 };
 
-// Initialize Firebase (No need to assign to 'app' if it's not used elsewhere)
-initializeApp(firebaseConfig);
-
 // --- App ID ---
 // A unique identifier for this application.
 const appId = 'feeder-tracker-d036b';
@@ -421,7 +418,9 @@ export default function App() {
 
         const authenticate = async () => {
             try {
+                // eslint-disable-next-line no-undef
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) { 
+                    // eslint-disable-next-line no-undef
                     await signInWithCustomToken(auth, __initial_auth_token); 
                 } else { 
                     await signInAnonymously(auth); 
@@ -520,7 +519,7 @@ export default function App() {
     };
 
     const handleExport = () => {
-        if (!xlsxLoaded || typeof XLSX === 'undefined') return;
+        if (!xlsxLoaded || typeof window.XLSX === 'undefined') return;
 
         const latestTimestamps = {};
         history.forEach(entry => {
@@ -529,7 +528,7 @@ export default function App() {
             }
         });
         
-        const workbook = XLSX.utils.book_new();
+        const workbook = window.XLSX.utils.book_new();
 
         // --- Create Status Report Sheet ---
         const reportSheetData = [];
@@ -545,21 +544,9 @@ export default function App() {
         Object.entries(quadrantData).forEach(([key, data]) => {
             reportSheetData.push([key, data.earned.toFixed(1), data.total, data.total > 0 ? `${((data.earned / data.total) * 100).toFixed(2)}%` : '0.00%']);
         });
-        reportSheetData.push([]);
-        reportSheetData.push(['Progress Over Time Data']);
-        Object.entries(graphData).forEach(([quad, data]) => {
-            if (data.length > 0) {
-                reportSheetData.push([]);
-                reportSheetData.push([`${quad} Progress`]);
-                reportSheetData.push(['Timestamp', 'Percent Complete']);
-                data.forEach(point => {
-                    reportSheetData.push([point.time.toLocaleString(), `${point.percentComplete.toFixed(2)}%`]);
-                });
-            }
-        });
         
-        const reportSheet = XLSX.utils.aoa_to_sheet(reportSheetData);
-        XLSX.utils.book_append_sheet(workbook, reportSheet, "Status Report");
+        const reportSheet = window.XLSX.utils.aoa_to_sheet(reportSheetData);
+        window.XLSX.utils.book_append_sheet(workbook, reportSheet, "Status Report");
 
 
         // --- Create Detailed Data Sheets ---
@@ -572,7 +559,7 @@ export default function App() {
                     'Last Status Change': latestTimestamps[cell.id] || 'N/A' 
                 }));
             if(quadCells.length > 0) {
-                XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(quadCells), `${quad} Map Data`);
+                window.XLSX.utils.book_append_sheet(workbook, window.XLSX.utils.json_to_sheet(quadCells), `${quad} Map Data`);
             }
              const quadBorescope = borescopeItems.filter(c => c.quadrant === quad).sort((a, b) => a.id.localeCompare(b.id))
                 .map(item => ({ 
@@ -581,10 +568,10 @@ export default function App() {
                     'Last Status Change': latestTimestamps[item.id] || 'N/A'
                 }));
             if(quadBorescope.length > 0) {
-                 XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(quadBorescope), `${quad} Borescope`);
+                 window.XLSX.utils.book_append_sheet(workbook, window.XLSX.utils.json_to_sheet(quadBorescope), `${quad} Borescope`);
             }
         });
-        try { XLSX.writeFile(workbook, "UpperFeederRemovalTracker_Export.xlsx"); } 
+        try { window.XLSX.writeFile(workbook, "UpperFeederRemovalTracker_Export.xlsx"); } 
         catch (error) { console.error("Error exporting to Excel:", error); }
     };
 
@@ -724,4 +711,3 @@ export default function App() {
         </div>
     );
 }
-
