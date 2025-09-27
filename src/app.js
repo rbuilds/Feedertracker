@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from 'firebase/auth';
+import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, collection, doc, getDocs, writeBatch, updateDoc, onSnapshot, serverTimestamp, addDoc, query, orderBy } from 'firebase/firestore';
 import { CheckCircle, XCircle, Clock, PauseCircle, PlayCircle, FileDown } from 'lucide-react';
 
@@ -418,13 +418,7 @@ export default function App() {
 
         const authenticate = async () => {
             try {
-                // eslint-disable-next-line no-undef
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) { 
-                    // eslint-disable-next-line no-undef
-                    await signInWithCustomToken(auth, __initial_auth_token); 
-                } else { 
-                    await signInAnonymously(auth); 
-                }
+                await signInAnonymously(auth); 
             } catch (err) { console.error("Authentication error:", err); }
         };
         authenticate();
@@ -543,6 +537,18 @@ export default function App() {
         });
         Object.entries(quadrantData).forEach(([key, data]) => {
             reportSheetData.push([key, data.earned.toFixed(1), data.total, data.total > 0 ? `${((data.earned / data.total) * 100).toFixed(2)}%` : '0.00%']);
+        });
+        reportSheetData.push([]);
+        reportSheetData.push(['Progress Over Time Data']);
+        Object.entries(graphData).forEach(([quad, data]) => {
+            if (data.length > 0) {
+                reportSheetData.push([]);
+                reportSheetData.push([`${quad} Progress`]);
+                reportSheetData.push(['Timestamp', 'Percent Complete']);
+                data.forEach(point => {
+                    reportSheetData.push([point.time.toLocaleString(), `${point.percentComplete.toFixed(2)}%`]);
+                });
+            }
         });
         
         const reportSheet = window.XLSX.utils.aoa_to_sheet(reportSheetData);
